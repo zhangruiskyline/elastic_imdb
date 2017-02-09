@@ -17,13 +17,13 @@ scrapy crawl 'imdb_spider'
 
 2. Basic code module(imdb as example)
 
-import scrapy
-import sys
 
-'''
 once the spider has started, it will send request and first call back is parse func
 then insert into yield msg queue, if there is response, call callback
-'''
+
+
+```import scrapy
+import sys
 
 class moviespider(scrapy.Spider):
     name = "imdb_spider"
@@ -40,3 +40,4 @@ class moviespider(scrapy.Spider):
         if next_page:
             yield scrapy.Request(self.imdbhome+next_page[0],self.parse)``
 
+```
