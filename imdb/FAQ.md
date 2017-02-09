@@ -22,7 +22,8 @@ once the spider has started, it will send request and first call back is parse f
 then insert into yield msg queue, if there is response, call callback
 
 
-```import scrapy
+```python
+import scrapy
 import sys
 
 class moviespider(scrapy.Spider):
