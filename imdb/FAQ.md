@@ -1,19 +1,25 @@
 1. Scrapy and XPATH command
 
 1.1 start scrapy shell
+```
 scrapy shell "http://www.imdb.com/search/title?release_date=1990,2016&user_rating=7.0,10&sort=user_rating,desc"
+```
 
-1.2 example of xpath to fetch href link, inspect the html item and put corresponding syntax``
+1.2 example of xpath to fetch href link, inspect the html item and put corresponding syntax
+```
 response.selector.xpath('//span[contains(@class,"lister-item-index")]/text()').extract()
 response.selector.xpath('//h3[@class="lister-item-header"]/a/@href').extract()
+```
 
 1.3 scrapy start project
+``
 scrapy startproject imdb
-
+``
 
 1.4 scrapy start spider in command line
+```
 scrapy crawl 'imdb_spider'
-
+```
 
 2. Basic code module(imdb as example)
 
