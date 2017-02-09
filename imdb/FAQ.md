@@ -1,4 +1,4 @@
-1. Scrapy and XPATH command
+**1. Scrapy and XPATH command**
 
 1.1 start scrapy shell
 ```
@@ -50,3 +50,14 @@ class moviespider(scrapy.Spider):
             yield scrapy.Request(self.imdbhome+next_page[0],self.parse)``
 
 ```
+
+
+**2. Elastic Search**
+2.1 
+node is logical, can be in one machine or distributed. 
+
+2.2 
+If we do not use mapping, elastic default store is text
+
+2.3 
+For each Doctype, we need to define meta sub class to define the index

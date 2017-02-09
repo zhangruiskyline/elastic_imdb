@@ -1,5 +1,7 @@
 import scrapy
 import sys
+import random
+import time
 
 class moviespider(scrapy.Spider):
     name = "imdb_spider"
@@ -13,6 +15,7 @@ class moviespider(scrapy.Spider):
         next_page = response.selector.xpath('//a[@ref-marker="adv_nxt"]/@href').extract()
         for movie in movie_href:
             yield scrapy.Request(movie,callback=self.parse_movie)
+            time.sleep(random.randint(1,3))
         if next_page:
             yield scrapy.Request(self.imdbhome+next_page[0],self.parse)
 

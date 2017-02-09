@@ -211,6 +211,7 @@
           <option value="app.flask_sqlalchemy" />
           <option value="app.views.*" />
           <option value="app.email.flask_mail" />
+          <option value="imdb.pipelines.elasticsearch_dsl" />
         </list>
       </option>
     </inspection_tool>
