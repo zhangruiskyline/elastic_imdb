@@ -17,16 +17,18 @@ scrapy crawl 'imdb_spider'
 
 2. Basic code module(imdb as example)
 
-
-once the spider has started, it will send request and first call back is parse func
-then insert into yield msg queue, if there is response, call callback
-
-
 ```python
 import scrapy
 import sys
 
 class moviespider(scrapy.Spider):
+
+    '''
+    once the spider has started, it will send request and first call back is parse func 
+    then insert into yield msg queue, if there is response, call callback
+
+    '''
+
     name = "imdb_spider"
     start_urls = [
         """http://www.imdb.com/search/title?release_date=1980-01-01,2018-01-01&title_type=feature&user_rating=7.0,10"""
