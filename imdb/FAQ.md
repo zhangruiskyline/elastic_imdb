@@ -53,6 +53,21 @@ class moviespider(scrapy.Spider):
 
 
 **2. Elastic Search**
+
+how to start elastic search
+under the /bin/ in elasticsearch 
+```
+./bin/elasticsearch 
+```
+or we can start with damen
+```
+./bin/elasticsearch -d
+```
+you can check the status
+```
+ps aux |grep elastic
+```
+
 2.1 
 node is logical, can be in one machine or distributed. 
 
@@ -61,3 +76,50 @@ If we do not use mapping, elastic default store is text
 
 2.3 
 For each Doctype, we need to define meta sub class to define the index
+
+2.4 
+ES can have two analyzer, index and search analyzer can be different
+
+2.5 handle string and unicode
+can input directly the unicode into es, es will handle 
+
+2.6 
+In python, need to define a es client to talk to server
+```python
+from elasticsearch import Elasticsearch
+
+#eleastic search clien(to connect to server)
+es = Elasticsearch()
+```
+
+2.7
+configure the setting.py also
+```
+# Configure item pipelines
+# See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
+ITEM_PIPELINES = {
+    'imdb.pipelines.ImdbPipeline': 300,
+}
+```
+
+2.8
+Need to configure Token_filter and analyzer for es
+```python
+ngram_filter = token_filter('ngram_filter',
+                            type='nGram',
+                            min_gram=1,
+                            max_gram=20)
+
+ngram_analyzer = analyzer('ngram_analyzer',
+                          type='custom',
+                          tokenizer='whitespace',
+                          filter=[
+                              'lowercase',
+                              'asciifolding',
+                              ngram_filter
+                          ])
+```
+
+2.9 Difference between analyzer and search_analyzer
+
+search_analyzer is used for query, analyzer is used for index
