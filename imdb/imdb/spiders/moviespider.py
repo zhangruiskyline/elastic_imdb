@@ -52,4 +52,4 @@ def normalize_string(s):
     return s.lstrip().rstrip()
 
 def normalize_integer(num):
-    return int(filter(lambda x: x.isdigit(), num))
+    return int(''.join([i for i in num if i.isdigit()]))

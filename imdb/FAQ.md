@@ -122,4 +122,23 @@ ngram_analyzer = analyzer('ngram_analyzer',
 
 2.9 Difference between analyzer and search_analyzer
 
-search_analyzer is used for query, analyzer is used for index
+search_analyzer is used for query, analyzer is used for index,if we use ngram for search)analyzer.
+"abc" will be searched as a,b,c,ab,bc,abc
+
+2.10 Mapping
+
+Using elasticsearch_dsl python dsl, do not need to write our own query body, generated one will be something like
+```
+{"mappings": {"movie": {"properties": {"title": {"fields": {"raw": {"type": "keyword"}}, "type": "text"}, "summary": {"type": "text"}, "datePublished": {"type": "date"}, "creators": {"type": "keyword"}, "genres": {"type": "keyword"}, "casts": {"type": "keyword"}, "time": {"type": "integer"}, "countries": {"type": "keyword"}, "plot_keywords": {"type": "keyword"}, "languages": {"type": "keyword"}, "rating": {"type": "float"}, "poster": {"type": "keyword"}, "suggest": {"analyzer": "ngram_analyzer", "search_analyzer": "standard", "type": "completion"}}}}, "settings": {"analysis": {"analyzer": {"ngram_analyzer": {"tokenizer": "whitespace", "filter": ["lowercase", "asciifolding", "ngram_filter"], "type": "custom"}}, "filter": {"ngram_filter": {"min_gram": 1, "max_gram": 20, "type": "nGram"}}}}}
+```
+2.11
+
+we can check es results in localhost
+```
+http://localhost:9200/imdb/_search?pretty
+```
+
+index mapping can be checked
+```
+http://localhost:9200/imdb/_mapping?pretty
+```
