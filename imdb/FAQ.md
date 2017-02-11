@@ -142,3 +142,17 @@ index mapping can be checked
 ```
 http://localhost:9200/imdb/_mapping?pretty
 ```
+
+**3. Jinja2**
+
+use block to abstract the common in base.html
+```html
+{% block xxxx %}
+{% endblock %}
+```
+in other html file
+```html
+{% extends "base.html" %}
+{% block xxx %}
+```
+only need to change the differen part than base.html

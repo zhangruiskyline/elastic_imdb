@@ -1,20 +1,7 @@
-curl -XPUT 'localhost:9200/music?pretty' -d'{ 
-    "mappings":
-    { 
-        "song" :
-        { 
-            "properties" :
-             { 
-                "suggest" :
-                { 
-                    "type" : "completion"
-                }, 
-                "title" :
-                { 
-                    "type": "keyword" 
-                } 
-            } 
-        } 
-    }
- } '
+curl -XPOST 'localhost:9200/_analyze?pretty' -d'
+{
+  "analyzer": "ngram_analyzer",
+  "text":     "Thequickbrownfox."
+}
+'
 
