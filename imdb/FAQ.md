@@ -1,27 +1,27 @@
-**1. Scrapy and XPATH command**
+#**1. Scrapy and XPATH command**
 
-1.1 start scrapy shell
+* start scrapy shell
 ```
 scrapy shell "http://www.imdb.com/search/title?release_date=1990,2016&user_rating=7.0,10&sort=user_rating,desc"
 ```
 
-1.2 example of xpath to fetch href link, inspect the html item and put corresponding syntax
+* example of xpath to fetch href link, inspect the html item and put corresponding syntax
 ```
 response.selector.xpath('//span[contains(@class,"lister-item-index")]/text()').extract()
 response.selector.xpath('//h3[@class="lister-item-header"]/a/@href').extract()
 ```
 
-1.3 scrapy start project
+* scrapy start project
 ``
 scrapy startproject imdb
 ``
 
-1.4 scrapy start spider in command line
+* scrapy start spider in command line
 ```
 scrapy crawl 'imdb_spider'
 ```
 
-2. Basic code module(imdb as example)
+## Basic code module(imdb as example)
 
 ```python
 import scrapy
@@ -52,7 +52,7 @@ class moviespider(scrapy.Spider):
 ```
 
 
-**2. Elastic Search**
+# Elastic Search
 
 how to start elastic search
 under the /bin/ in elasticsearch 
@@ -68,23 +68,18 @@ you can check the status
 ps aux |grep elastic
 ```
 
-2.1 
-node is logical, can be in one machine or distributed. 
 
-2.2 
-If we do not use mapping, elastic default store is text
+* node is logical, can be in one machine or distributed. 
 
-2.3 
-For each Doctype, we need to define meta sub class to define the index
+* If we do not use mapping, elastic default store is text
 
-2.4 
-ES can have two analyzer, index and search analyzer can be different
+* For each Doctype, we need to define meta sub class to define the index
 
-2.5 handle string and unicode
-can input directly the unicode into es, es will handle 
+* ES can have two analyzer, index and search analyzer can be different
 
-2.6 
-In python, need to define a es client to talk to server
+* handle string and unicode: can input directly the unicode into es, es will handle 
+
+* In python, need to define a es client to talk to server
 ```python
 from elasticsearch import Elasticsearch
 
@@ -92,8 +87,7 @@ from elasticsearch import Elasticsearch
 es = Elasticsearch()
 ```
 
-2.7
-configure the setting.py also
+* configure the setting.py also
 ```
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
@@ -102,8 +96,8 @@ ITEM_PIPELINES = {
 }
 ```
 
-2.8
-Need to configure Token_filter and analyzer for es
+
+* Need to configure Token_filter and analyzer for es
 ```python
 ngram_filter = token_filter('ngram_filter',
                             type='nGram',
@@ -120,20 +114,20 @@ ngram_analyzer = analyzer('ngram_analyzer',
                           ])
 ```
 
-2.9 Difference between analyzer and search_analyzer
+* Difference between analyzer and search_analyzer
 
 search_analyzer is used for query, analyzer is used for index,if we use ngram for search)analyzer.
 "abc" will be searched as a,b,c,ab,bc,abc
 
-2.10 Mapping
+* Mapping
 
 Using elasticsearch_dsl python dsl, do not need to write our own query body, generated one will be something like
 ```
 {"mappings": {"movie": {"properties": {"title": {"fields": {"raw": {"type": "keyword"}}, "type": "text"}, "summary": {"type": "text"}, "datePublished": {"type": "date"}, "creators": {"type": "keyword"}, "genres": {"type": "keyword"}, "casts": {"type": "keyword"}, "time": {"type": "integer"}, "countries": {"type": "keyword"}, "plot_keywords": {"type": "keyword"}, "languages": {"type": "keyword"}, "rating": {"type": "float"}, "poster": {"type": "keyword"}, "suggest": {"analyzer": "ngram_analyzer", "search_analyzer": "standard", "type": "completion"}}}}, "settings": {"analysis": {"analyzer": {"ngram_analyzer": {"tokenizer": "whitespace", "filter": ["lowercase", "asciifolding", "ngram_filter"], "type": "custom"}}, "filter": {"ngram_filter": {"min_gram": 1, "max_gram": 20, "type": "nGram"}}}}}
 ```
-2.11
 
-we can check es results in localhost
+
+* we can check es results in localhost
 ```
 http://localhost:9200/imdb/_search?pretty
 ```
@@ -143,7 +137,13 @@ index mapping can be checked
 http://localhost:9200/imdb/_mapping?pretty
 ```
 
-**3. Jinja2**
+# Kibana
+
+* open source data analysis and virtualization tool
+* works with elastic search
+* Web based application
+
+# Jinja2
 
 use block to abstract the common in base.html
 ```html
