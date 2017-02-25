@@ -432,6 +432,151 @@ GET /_search
 ```
 
 ## Aggregation
+* Buckets
+    * subbuckets
+* Metrics
+    * stats
+    * min
+    * max
+    * avg
+* Can write own script 
+```
+{
+    "aggs" : {
+        "avg_grade" : { "avg" : { "field" : "grade" } }
+    }
+}
+```
+
+> in Aggregation, if we do not want certain field to be included, can put *missing* value
+```
+{
+    "aggs" : {
+        "tag_cardinality" : {
+            "cardinality" : {
+                "field" : "tag",
+                "missing": "N/A" 
+            }
+        }
+    }
+}
+```
+
+# Elasticsearch-DSL Python
+
+## Search object
+```python
+s = Search(using=client)
+s = s.using(client)
+s = Search().using(client).query("match", title="python")
+response = s.execute()
+```
+
+## Queries
+Match the command query to python code
+```
+# {"multi_match": {"query": "python django", "fields": ["title", "body"]}}
+MultiMatch(query='python django', fields=['title', 'body'])
+
+
+# {"match": {"title": {"query": "web framework", "type": "phrase"}}}
+Match(title={"query": "web framework", "type": "phrase"})
+
+Q("multi_match", query='python django', fields=['title', 'body'])
+Q({"multi_match": {"query": "python django", "fields": ["title", "body"]}})
+```
+
+## Add Query to search object
+```python
+q = Q("multi_match", query='python django', fields=['title', 'body'])
+s = s.query(q)
+s = s.query("multi_match", query='python django', fields=['title', 'body'])
+s.query = Q('bool', must=[Q('match', title='python'), Q('match', body='best')])
+```
+
+## Query Combination
+```python
+Q("match", title='python') | Q("match", title='django')
+# {"bool": {"should": [...]}}
+
+Q("match", title='python') & Q("match", title='django')
+# {"bool": {"must": [...]}}
+
+~Q("match", title="python")
+# {"bool": {"must_not": [...]}}
+q = Q('bool',
+    must=[Q('match', title='python')],
+    should=[Q(...), Q(...)],
+    minimum_should_match=1
+)
+s = Search().query(q)
+```
+
+## Filter
+```python
+s = Search()
+s = s.filter('terms', tags=['search', 'python'])
+s = Search()
+s = s.query('bool', filter=[Q('terms', tags=['search', 'python'])])
+```
+
+## Aggregation
+ * define aggregation
+
+```python
+a = A('terms', field='category')
+# {'terms': {'field': 'category'}}
+
+a.metric('clicks_per_category', 'sum', field='clicks')\
+    .bucket('tags_per_category', 'terms', field='tags')
+# {
+#   'terms': {'field': 'category'},
+#   'aggs': {
+#     'clicks_per_category': {'sum': {'field': 'clicks'}},
+#     'tags_per_category': {'terms': {'field': 'tags'}}
+#   }
+# }
+```
+
+ * Add Aggregation into search object
+```python
+s = Search()
+a = A('terms', field='category')
+s.aggs.bucket('category_terms', a)
+# {
+#   'aggs': {
+#     'category_terms': {
+#       'terms': {
+#         'field': 'category'
+#       }
+#     }
+#   }
+# }
+```
+
+Use the elastic search DSL to construct in python format
+```python
+s = Search()
+
+s.aggs.bucket('per_category', 'terms', field='category')
+s.aggs['per_category'].metric('clicks_per_category', 'sum', field='clicks')
+s.aggs['per_category'].bucket('tags_per_category', 'terms', field='tags')
+```
+
+## Sorting & Pagination
+```python
+s = Search().sort(
+    'category',
+    '-title',
+    {"lines" : {"order" : "asc", "mode" : "avg"}}
+)
+s = s[10:20]
+```
+
+## Suggestion
+```python
+s = s.suggest('my_suggestion', 'pyhton', term={'field': 'title'})
+```
 
 
 # Kibana
