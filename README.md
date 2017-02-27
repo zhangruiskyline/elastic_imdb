@@ -578,6 +578,48 @@ s = s[10:20]
 s = s.suggest('my_suggestion', 'pyhton', term={'field': 'title'})
 ```
 
+# elasticsearch_dsl
+
+DSL is domain specific language. like make file, shell. etc. 
+
+ > External DSL: Implemented as standalone languages
+
+ > Internal DSL: Implemented via host language and work under environment 
+ 
+## EBNF 
+
+## Example
+First step is to install pyparsing
+```python
+import pyparsing as pp
+Integer = pp.Word(pp.nums).setParseAction(lambda t: int(t[0]))
+# run it
+Integer.parseString('12345')
+#Out: ([12345], {})
+Integer.parseString('12345')[0]
+#Out: 12345
+Integer.parseString('12345asdc')[0]   # imcompatible will be discarded
+#Out: 12345
+Integer.parseString('12345asdc',parseAll=True)[0]
+# Exception
+```
+
+We can use this to construct our own parser
+```python
+import pyparsing as pp
+String = pp.Word(pp.alphanums)
+Operation = pp.Literal('filter=') + 'sw' + pp.Literal('(title,') + String + pp.Literal(')')
+Operation.parseString('filter=sw(title,abc)')
+#Out[15] (['filter=', 'sw', '(title,', 'abc', ')'], {})   #Tokenlized 
+
+# We can even do one more step to get value:
+Operation = pp.Literal('filter=') + 'sw' + pp.Literal('(title,') + String('val') + pp.Literal(')')
+Operation.parseString('filter=sw(title,abc)')['val']
+#out: 'abc'
+
+
+```
+
 
 # Kibana
 
